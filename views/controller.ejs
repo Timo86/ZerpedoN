@@ -26,12 +26,14 @@
 </div>
 
 
-<script src="lib/js/head.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.core.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
 <script>
 	var defaultTitle = 'Remote Presentation Controller';
 	var presentation_id = prompt('Quelle id ?');
 	document.title = presentation_id;
-	head.js( '/js/jquery-1.7.2.min.js' ,'/socket.io/socket.io.js' , function() {
+	head.js('/socket.io/socket.io.js' , function() {
 		
 		// connect
 		var socket = io.connect('/');			

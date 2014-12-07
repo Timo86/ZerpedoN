@@ -35,10 +35,12 @@
 	</div>	
 
 <!-- Optional libraries for code syntax highlighting and classList support in IE9 -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="/lib/js/head.min.js"></script>
 
+
 <script>	
-	head.js('/js/jquery-1.7.2.min.js', '/socket.io/socket.io.js' , function() {
+	head.js("/socket.io/socket.io.js" , function() {
 			// presentation setting
 		var presentation_title;
 		var presentation_id;
@@ -73,15 +75,7 @@
 				socket.emit('request_newPresentation', {'id': presentation_id ,'title' : presentation_title, 'control' : presentation_control} );
 				document.title = presentation_title;//set title
 			} );
-			
-			/*$( ".getId" ).change(function(){
-				presentation_title = $( "#selectPrez" ).val();
-				console.log(presentation_title);
-				$('.myId').html('ID de prise en main à distance : '+presentation_id);
-				socket.emit('request_newPresentation', {'id': presentation_id ,'title' : presentation_title, 'control' : presentation_control} );
-			} );*/
 				
-			
 			
 			socket.on('newPresentation_create', function(){
 				$('#link').append('<a href="./'+presentation_id+'/'+presentation_title+'">easyway.ovh/'+presentation_id+'/'+presentation_title+'</a>');
