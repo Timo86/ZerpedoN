@@ -1,0 +1,98 @@
+<!doctype html>  
+<html lang="en">
+	
+	<head>
+		<meta charset="utf-8">
+		
+		<title>New presentation</title>
+
+		<meta name="description" content="An easy to use CSS 3D slideshow tool for quickly creating good looking HTML presentations.">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+		
+	</head>
+	
+	<body>
+	<div id="link">
+			<div class="choiceRemote">
+			<p class="useRemote">Voulez-vous que les autres utilisateurs puissent parcourir de diaporama ?</p>
+			<div class="btnYesNo">
+				<button class="okRemote">Oui</button>
+				<button class="noRemote">non</button>
+			</div>
+		</div>
+		<div class="myPrez">
+		<p>Sélectionnez votre presentation :</p>
+			<select id="selectPrez">
+			  <option>demo-presentation</option>
+			  <option>ONG</option>
+			</select>
+			<button class="getId">OK</button>
+		</div>
+		<p class="myId"> </p>
+	</div>	
+
+<!-- Optional libraries for code syntax highlighting and classList support in IE9 -->
+<script src="/lib/js/head.min.js"></script>
+
+<script>	
+	head.js('/js/jquery-1.7.2.min.js', '/socket.io/socket.io.js' , function() {
+			// presentation setting
+		var presentation_title;
+		var presentation_id;
+		var presentation_control = false;
+		var id_ok = true;
+		$( ".okRemote" ).on( "click", function(){
+			presentation_control = true;
+			$( ".choiceRemote" ).remove();
+			$( ".myPrez" ).show();
+
+		} );
+
+		$( ".noRemote" ).on( "click", function(){
+			presentation_control = false;
+			$( ".choiceRemote" ).remove();
+			$( ".myPrez" ).show();
+		} );
+		
+
+			
+		// connect
+		var socket = io.connect('/');	
+		
+		socket.on('connect', function () {
+			console.log("client connected. Sending cur slide request");
+			// on connect send presentation request
+			presentation_id = Math.floor(Math.random()*(9999-0));
+			$( ".getId" ).on( "click", function(){
+				presentation_title = $( "#selectPrez" ).val();
+				console.log(presentation_title);
+				$('.myId').html('ID de prise en main à distance : '+presentation_id);
+				socket.emit('request_newPresentation', {'id': presentation_id ,'title' : presentation_title, 'control' : presentation_control} );
+				document.title = presentation_title;//set title
+			} );
+			
+			/*$( ".getId" ).change(function(){
+				presentation_title = $( "#selectPrez" ).val();
+				console.log(presentation_title);
+				$('.myId').html('ID de prise en main à distance : '+presentation_id);
+				socket.emit('request_newPresentation', {'id': presentation_id ,'title' : presentation_title, 'control' : presentation_control} );
+			} );*/
+				
+			
+			
+			socket.on('newPresentation_create', function(){
+				$('#link').append('<a href="./'+presentation_id+'/'+presentation_title+'">easyway.ovh/'+presentation_id+'/'+presentation_title+'</a>');
+			});
+		});
+		
+	} );
+	
+</script>
+	
+	
+	</body>
+</html>
+
